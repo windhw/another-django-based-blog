@@ -1,0 +1,64 @@
+﻿{% extends "base_news.html" %}
+
+{% block title %}| {{ object.headline|escape }}{% endblock %}
+
+{% block content %}
+{% load comments %}
+{% get_comment_count for object as comment_count %}
+
+<h1>{{ object.headline|safe }}</h1>
+<p class="date small">文章标签:
+{% for tag in object.tags.all %}
+{{ tag.name }}
+{% endfor %}
+</p>
+{{ object.body_html|safe }}
+<script language="javascript"> var f=1;var l=1;</script>
+
+<p class="date small">由<strong>{{ object.author }}</strong>发表于 {{ object.pub_date|date:"Y年n月j日" }}
+<a onclick="javascript:var cl=$('#commentlist');if(l){cl.show('fast');l=0;}else{cl.hide('fast');l=1;}return false;" 
+	href="#">{{comment_count }}留言</a>
+<a onclick="javascript:var cf=$('#commentform');if(f){cf.show('fast');f=0;}else{cf.hide('fast');f=1;}return false;" 
+       	href="#">发表留言</a>
+</p>
+
+
+<div id="commentform" style="display:none">
+{% get_comment_form for object as form %}
+<form action="{% comment_form_target %}" method="post">{% csrf_token %}
+	<input type="hidden" name="next" value="{{ object.get_absolute_url }}" /> 
+  {% for field in form %}
+    {% if field.is_hidden %}
+      <div>{{ field }}</div>
+    {% else %}
+      <p  {% if field.name == "honeypot" or field.name == "email" or field.name == "url" %} style="display:none;"{% endif %}>
+        {% if field.name == "name" %}
+            名称：<input type="text" name="name" maxlength="30"/>
+	{% else %}
+	    {% if field.name == "comment" %}
+	    评论：<br/><textarea id="id_comment" rows="3" cols="26" name="comment"></textarea>
+	    {% else %}
+	    	{% if field.name == "email" %}
+		     <input type="text" name="email" id="id_email" value="abc@example.com" />
+		{% else %}
+		     {{field}}
+		{% endif %}
+	    {% endif %}
+        {% endif %}
+      </p>
+    {% endif %}
+  {% endfor %}
+  <p class="submit">
+    <input type="submit" name="post" class="submit-post" value="留言" />
+  </p>
+</form>
+</div>
+<div id="commentlist" style="display:none">
+{% get_comment_list for object as comment_list %}
+{% for comment in comment_list %}
+<p>{{ comment.comment }}</p>
+<p class="date small">{{ comment.name }}   {{ comment.submit_date|date:"Y/n/j H:i" }}</span>
+{% endfor %}
+</div>
+
+{% endblock %}

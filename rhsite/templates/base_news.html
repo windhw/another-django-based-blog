@@ -1,0 +1,16 @@
+{% extends "base_2col.html" %}
+
+{% block extrahead %}
+<link rel="alternate" type="application/rss+xml" title="RSS" href="/rss/news/" />
+{% endblock %}
+
+{% block sectionid %}news{% endblock %}
+
+{% block title %}{% endblock %}
+
+{% block billboard %}<h2>随着万物生长成熟的盛夏的来临，白昼一天比一天长，也一天比一天过得更有趣。他学会了游泳，划船，尝到了与流水嬉戏的甜头。他把耳朵贴近芦苇杆时，有时会偷听到风在芦苇丛里的窃窃私语.  --《柳林风声》| The Wind in the Willows </h2>{% endblock %}
+
+{% block content-related %}
+{% load news %}{% render_sidebar %}
+
+{% endblock %}

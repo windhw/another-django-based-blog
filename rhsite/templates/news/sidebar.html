@@ -1,0 +1,15 @@
+﻿<h2>文章标签</h2>
+<ul class="linklist">
+  {% for tag in tags %}
+  <li><a href="/tag/{{ tag.slug }}/">{{ tag.name }}({{ tag.num_entry }})</a></li>
+  {% endfor %}
+</ul>
+<p></p>
+<p></p>
+<h2>归档</h2>
+<ul class="linklist">
+  {% load news %}
+  {% for d in dates reversed %}
+    <li><a href="/{{ d|date:"Y" }}/{{ d|get_month }}/">{{ d|date:"Y年M" }}</a></li>
+  {% endfor %}
+</ul>
